@@ -7,7 +7,11 @@ const directLine = new DirectLine({
   secret: 'AvY37YSRftY.cwA.Sms.JGgTwgGZb-NOT346gl1Hg0otOltyHMYr0nPqmpHXPk0'
 });
 
+// reply from bot
 const botMessageToGiftedMessage = botMessage => ({
+  // if(botMessage.text === this.state.sentMessage) {
+  //   return;
+  //   }
   ...botMessage,
   _id: botMessage.id,
   createdAt: botMessage.timestamp,
@@ -15,14 +19,13 @@ const botMessageToGiftedMessage = botMessage => ({
     _id: 2,
     name: 'React Native',
     avatar: 'https://placeimg.com/140/140/any'
-  }
+  } //.then(console.log(botMessage))
 });
 
+// sends user info to bot??
 function giftedMessageToBotMessage(message) {
   return {
-    from: { id: 1, name: 'Emma' },
-    name: 'Emma',
-    avatar: 'https://placeimg.com/140/140/any',
+    from: { id: 1, name: 'User' },
     type: 'message',
     text: message.text
   };
@@ -30,12 +33,17 @@ function giftedMessageToBotMessage(message) {
 
 export default class App extends React.Component {
   state = {
-    messages: []
+    messages: [],
+    sentMessage: null
   };
 
   constructor(props) {
     super(props);
     directLine.activity$.subscribe(botMessage => {
+      // console.log(botMessage); - shows carousel etc, also the echoed input
+      if (botMessage.text === this.state.sentMessage) {
+        return;
+      }
       const newMessage = botMessageToGiftedMessage(botMessage);
       this.setState({ messages: [newMessage, ...this.state.messages] });
     });
@@ -44,9 +52,13 @@ export default class App extends React.Component {
   onSend = messages => {
     this.setState({ messages: [...messages, ...this.state.messages] });
     messages.forEach(message => {
+      this.setState({ sentMessage: message.text });
       directLine
         .postActivity(giftedMessageToBotMessage(message))
-        .subscribe(() => console.log('success'), () => console.log('this totally failed'));
+        .subscribe(
+          () => console.log('success'),
+          () => console.log('this totally failed')
+        );
     });
   };
 
@@ -70,50 +82,3 @@ const styles = StyleSheet.create({
     flex: 1
   }
 });
-
-// export default class App extends React.Component {
-//   state = {
-//     messages: []
-//   };
-
-//   componentWillMount() {
-//     this.setState({
-//       messages: [
-//         {
-//           _id: 1,
-//           text: 'Hello developer',
-//           createdAt: new Date(),
-//           user: {
-//             _id: 2,
-//             name: 'React Native',
-//             avatar: 'https://placeimg.com/140/140/any'
-//           }
-//         }
-//       ]
-//     });
-//   }
-
-// onSend(messages = []) {
-//   this.setState(previousState => ({
-//     messages: GiftedChat.append(previousState.messages, messages)
-//   }));
-// }
-
-//   render() {
-//     return (
-//       <View style={styles.container}>
-//         <GiftedChat
-//           messages={this.state.messages}
-//           onSend={messages => this.onSend(messages)}
-//           user={{ _id: 1 }}
-//         />
-//       </View>
-//     );
-//   }
-// }
-
-// const styles = StyleSheet.create({
-//   container: {
-//     flex: 1
-//   }
-// });
