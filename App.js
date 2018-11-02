@@ -7,11 +7,8 @@ const directLine = new DirectLine({
   secret: 'AvY37YSRftY.cwA.Sms.JGgTwgGZb-NOT346gl1Hg0otOltyHMYr0nPqmpHXPk0'
 });
 
-// reply from bot
+// all params to include in reply from bot, think the carousel should be included somewhere here. Maybe? Dunno yet.
 const botMessageToGiftedMessage = botMessage => ({
-  // if(botMessage.text === this.state.sentMessage) {
-  //   return;
-  //   }
   ...botMessage,
   _id: botMessage.id,
   createdAt: botMessage.timestamp,
@@ -19,10 +16,10 @@ const botMessageToGiftedMessage = botMessage => ({
     _id: 2,
     name: 'React Native',
     avatar: 'https://placeimg.com/140/140/any'
-  } //.then(console.log(botMessage))
+  }
 });
 
-// sends user info to bot??
+// sends user info to bot
 function giftedMessageToBotMessage(message) {
   return {
     from: { id: 1, name: 'User' },
@@ -39,8 +36,9 @@ export default class App extends React.Component {
 
   constructor(props) {
     super(props);
+    // the full bot reply, seems to include all messages sent
     directLine.activity$.subscribe(botMessage => {
-      // console.log(botMessage); - shows carousel etc, also the echoed input
+      console.log(botMessage); // - shows carousel and replies etc. Basically this is all messages in state
       if (botMessage.text === this.state.sentMessage) {
         return;
       }
@@ -49,6 +47,7 @@ export default class App extends React.Component {
     });
   }
 
+  // Sends messages from the user to the Bot and console.logs if sending was successful or not
   onSend = messages => {
     this.setState({ messages: [...messages, ...this.state.messages] });
     messages.forEach(message => {
@@ -77,6 +76,7 @@ export default class App extends React.Component {
   }
 }
 
+// Styling for messages
 const styles = StyleSheet.create({
   container: {
     flex: 1
