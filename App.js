@@ -4,7 +4,7 @@ import { GiftedChat } from 'react-native-gifted-chat';
 import { DirectLine } from 'botframework-directlinejs';
 
 const directLine = new DirectLine({
-  secret: 'AvY37YSRftY.cwA.Sms.JGgTwgGZb - NOT346gl1Hg0otOltyHMYr0nPqmpHXPk0'
+  secret: 'AvY37YSRftY.cwA.Sms.JGgTwgGZb-NOT346gl1Hg0otOltyHMYr0nPqmpHXPk0'
 });
 
 const botMessageToGiftedMessage = botMessage => ({
@@ -46,7 +46,7 @@ export default class App extends React.Component {
     messages.forEach(message => {
       directLine
         .postActivity(giftedMessageToBotMessage(message))
-        .subscribe(() => console.log('success'), () => console.log('failed'));
+        .subscribe(() => console.log('success'), () => console.log('this totally failed'));
     });
   };
 
