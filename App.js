@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, View, KeyboardAvoidingView } from 'react-native';
 import { GiftedChat } from 'react-native-gifted-chat';
 import { DirectLine } from 'botframework-directlinejs';
 
@@ -63,15 +63,17 @@ export default class App extends React.Component {
 
   render() {
     return (
-      <View style={styles.container}>
-        <GiftedChat
-          user={{
-            _id: 1
-          }}
-          messages={this.state.messages}
-          onSend={this.onSend}
-        />
-      </View>
+      <KeyboardAvoidingView style={styles.container} behavior="padding" enabled>
+        <View style={styles.container}>
+          <GiftedChat
+            user={{
+              _id: 1
+            }}
+            messages={this.state.messages}
+            onSend={this.onSend}
+          />
+        </View>
+      </KeyboardAvoidingView>
     );
   }
 }
