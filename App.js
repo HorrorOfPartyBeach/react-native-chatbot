@@ -1,95 +1,56 @@
-import React from 'react';
-import { StyleSheet, View, KeyboardAvoidingView } from 'react-native';
-import Messages from './components/Messages';
-import renderif from './utils/renderif';
-import Login from './components/Login';
-// import { GiftedChat } from 'react-native-gifted-chat';
-// import { DirectLine } from 'botframework-directlinejs';
-// import { Login } from './components/Login';
+// import React from 'react';
+// import { StyleSheet } from 'react-native';
+// , View, KeyboardAvoidingView
+// import Messages from './components/Messages';
+// import Login from './components/Login';
+import App from './app/index';
+export default App;
 
-// const directLine = new DirectLine({
-//   secret: 'AvY37YSRftY.cwA.Sms.JGgTwgGZb-NOT346gl1Hg0otOltyHMYr0nPqmpHXPk0'
-// });
-
-// // all params to include in reply from bot, think the carousel is in the messages somewhere here. Maybe? Dunno.
-// const botMessageToGiftedMessage = botMessage => ({
-//   ...botMessage,
-//   _id: botMessage.id,
-//   createdAt: botMessage.timestamp,
-//   user: {
-//     _id: 2,
-//     name: 'React Native',
-//     avatar: 'https://placeimg.com/140/140/any'
+// export default class App extends React.Component {
+//   constructor(props) {
+//     super(props);
+//     this.state = {
+//       isUserLoggedIn: false
+//     };
 //   }
-// });
 
-// // sends user info to bot
-// function giftedMessageToBotMessage(message) {
-//   return {
-//     from: { id: 1, name: 'User' },
-//     type: 'message',
-//     text: message.text
-//   };
+//   render() {
+//     if (!this.state.isUserLoggedIn) {
+//       return (
+//         <KeyboardAvoidingView
+//           style={styles.container}
+//           behavior="padding"
+//           enabled
+//         >
+//           <View style={styles.container}>
+//             {/* <Text>Why is this not working??</Text> */}
+//             <Login
+//               login={this.onLogin}
+//               isUserLoggedIn={this.state.isUserLoggedIn}
+//             />
+//           </View>
+//         </KeyboardAvoidingView>
+//       );
+//     } else if (this.state.isUserLoggedIn) {
+//       return (
+//         <KeyboardAvoidingView
+//           style={styles.container}
+//           behavior="padding"
+//           enabled
+//         >
+//           <View style={styles.container}>
+//             {/* <Text>hello, how are you</Text> */}
+//             <Messages />
+//           </View>
+//         </KeyboardAvoidingView>
+//       );
+//     }
+//   }
 // }
 
-export default class App extends React.Component {
-  constructor(props) {
-    super(props);
-    // // the full bot reply, seems to include all messages sent
-    // directLine.activity$.subscribe(botMessage => {
-    //   console.log(botMessage); // - shows carousel and replies etc. Basically this is all messages in state
-    //   if (botMessage.text === this.state.sentMessage) {
-    //     return;
-    //   }
-    //   const newMessage = botMessageToGiftedMessage(botMessage);
-    //   this.setState({ messages: [newMessage, ...this.state.messages] });
-    // });
-    this.state = {
-      // messages: [],
-      // sentMessage: null
-      // username: 'Emma',
-      // password: 'password',
-      isUserLoggedIn: false
-    };
-  }
-
-  // Sends messages from the user to the Bot and console.logs if sending was successful or not
-  // onSend = messages => {
-  //   this.setState({ messages: [...messages, ...this.state.messages] });
-  //   messages.forEach(message => {
-  //     this.setState({ sentMessage: message.text });
-  //     directLine
-  //       .postActivity(giftedMessageToBotMessage(message))
-  //       .subscribe(
-  //         () => console.log('success'),
-  //         () => console.log('this totally failed')
-  //       );
-  //   });
-  // };
-
-  render() {
-    return (
-      <KeyboardAvoidingView style={styles.container} behavior="padding" enabled>
-        <View style={styles.container}>
-          {/* <GiftedChat
-            user={{
-              _id: 1
-            }}
-            messages={this.state.messages}
-            onSend={this.onSend}
-          /> */}
-          {renderif(this.state.isUserLoggedIn, <Login />)}
-
-          {renderif(!this.state.isUserLoggedIn, <Messages />)}
-        </View>
-      </KeyboardAvoidingView>
-    );
-  }
-}
-
-// Styling for messages
-const styles = StyleSheet.create({
-  container: {
-    flex: 1
-  }
-});
+// // Styling for messages
+// const styles = StyleSheet.create({
+//   container: {
+//     flex: 1
+//   }
+// });
