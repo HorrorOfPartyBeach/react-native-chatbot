@@ -1,11 +1,20 @@
 import React from 'react';
-import { StyleSheet, View, KeyboardAvoidingView } from 'react-native';
+import {
+  StyleSheet,
+  View,
+  KeyboardAvoidingView
+  // Platform,
+  // StatusBar
+} from 'react-native';
 import { GiftedChat } from 'react-native-gifted-chat';
 import { DirectLine } from 'botframework-directlinejs';
 
 const directLine = new DirectLine({
   secret: 'AvY37YSRftY.cwA.Sms.JGgTwgGZb-NOT346gl1Hg0otOltyHMYr0nPqmpHXPk0'
 });
+
+// const keyboardVerticalOffset =
+//   Platform.OS === 'android' ? StatusBar.currentHeight : 0;
 
 // all params to include in reply from bot, think the carousel is in the messages somewhere here. Maybe? Dunno.
 const botMessageToGiftedMessage = botMessage => ({
@@ -63,12 +72,16 @@ export default class Messages extends React.Component {
 
   render() {
     return (
-      <KeyboardAvoidingView style={styles.container} behavior="padding" enabled>
+      <KeyboardAvoidingView
+        style={styles.container}
+        behavior={'padding'}
+        style={{ flex: 1 }}
+        keyboardVerticalOffset={50}
+        enabled
+      >
         <View style={styles.container}>
           <GiftedChat
-            user={{
-              _id: 1
-            }}
+            user={{ _id: 1 }}
             messages={this.state.messages}
             onSend={this.onSend}
           />
