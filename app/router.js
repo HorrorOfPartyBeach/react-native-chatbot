@@ -23,14 +23,16 @@ export const SignedOut = createStackNavigator({
     screen: SignUp,
     navigationOptions: {
       title: 'Sign Up',
-      headerStyle
+      headerStyle,
+      tabBarVisible: false
     }
   },
   SignIn: {
     screen: SignIn,
     navigationOptions: {
       title: 'Sign In',
-      headerStyle
+      headerStyle,
+      tabBarVisible: false
     }
   }
 });
@@ -70,6 +72,7 @@ export const SignedIn = createMaterialTopTabNavigator(
       })
     }
   },
+  { enableKeyboardAvoiding: true },
   {
     tabBarOptions: {
       style: {

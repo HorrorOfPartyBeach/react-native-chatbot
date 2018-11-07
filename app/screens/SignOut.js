@@ -1,31 +1,29 @@
-import React from 'react';
-import { View } from 'react-native';
-import {
-  Card,
-  Button,
-  FormLabel,
-  FormInput,
-  Text
-} from 'react-native-elements';
-import { onSignIn } from '../auth';
+import React, { Component } from 'react';
+import { ScrollView, Button } from 'react-native';
+import { onSignOut } from '../auth';
 
-export default ({ navigation }) => (
-  <View style={{ paddingVertical: 20 }}>
-    <Card>
-      <Text>You are now signed out. Sign in again?</Text>
-      <FormLabel>Email</FormLabel>
-      <FormInput placeholder="Email address..." />
-      <FormLabel>Password</FormLabel>
-      <FormInput secureTextEntry placeholder="Password..." />
+class Logout extends Component {
+  _handleSubmit = () => {
+    let navigation = this.props.navigation;
+    onSignOut().then(() => navigation.navigate('SignedOut'));
+  };
 
-      <Button
-        buttonStyle={{ marginTop: 20 }}
-        backgroundColor="#03A9F4"
-        title="SIGN IN"
-        onPress={() => {
-          onSignIn().then(() => navigation.navigate('SignedIn'));
-        }}
-      />
-    </Card>
-  </View>
-);
+  render() {
+    let navigation = this.props.navigation;
+    return (
+      <ScrollView style={{ marginTop: 200 }}>
+        <Button
+          onPress={() => navigation.navigate('DrawerOpen')}
+          title="Open Sidebar"
+        />
+        <Button
+          backgroundColor="#03A9F4"
+          title="SIGN OUT"
+          onPress={this._handleSubmit}
+        />
+      </ScrollView>
+    );
+  }
+}
+
+export default Logout;
