@@ -1,11 +1,6 @@
 import React from 'react';
-import {
-  StyleSheet,
-  View,
-  KeyboardAvoidingView
-  // Platform,
-  // StatusBar
-} from 'react-native';
+import { daisy } from '../assets/daisy.png';
+import { StyleSheet, View, KeyboardAvoidingView } from 'react-native';
 import { GiftedChat } from 'react-native-gifted-chat';
 import { DirectLine } from 'botframework-directlinejs';
 
@@ -13,25 +8,23 @@ const directLine = new DirectLine({
   secret: 'AvY37YSRftY.cwA.Sms.JGgTwgGZb-NOT346gl1Hg0otOltyHMYr0nPqmpHXPk0'
 });
 
-// const keyboardVerticalOffset =
-//   Platform.OS === 'android' ? StatusBar.currentHeight : 0;
-
-// all params to include in reply from bot, think the carousel is in the messages somewhere here. Maybe? Dunno.
+// all params to include in reply from bot, the adaptive cards are also in the messages
 const botMessageToGiftedMessage = botMessage => ({
   ...botMessage,
   _id: botMessage.id,
   createdAt: botMessage.timestamp,
   user: {
     _id: 2,
-    name: 'React Native',
-    avatar: 'https://placeimg.com/140/140/any'
+    name: 'Daisy Bot',
+    avatar: daisy
   }
+  // image: 'https://placeimg.com/140/140/any'
 });
 
 // sends user info to bot
 function giftedMessageToBotMessage(message) {
   return {
-    from: { id: 1, name: 'User' },
+    from: { id: 1, name: 'Emma' },
     type: 'message',
     text: message.text
   };
@@ -45,14 +38,17 @@ export default class Messages extends React.Component {
 
   constructor(props) {
     super(props);
-    // the full bot reply, seems to include all messages sent
+    // full bot reply, includes all messages sent
     directLine.activity$.subscribe(botMessage => {
-      console.log(botMessage); // - shows carousel and replies etc. Basically this is all messages in state
+      console.log(botMessage); // - shows carousel and replies i.e. all messages in state
       if (botMessage.text === this.state.sentMessage) {
         return;
       }
+      // console.log(botMessage.attachments, 'hello from NC!');
       const newMessage = botMessageToGiftedMessage(botMessage);
-      this.setState({ messages: [newMessage, ...this.state.messages] });
+      this.setState({
+        messages: [newMessage, ...this.state.messages]
+      });
     });
   }
 
@@ -97,3 +93,22 @@ const styles = StyleSheet.create({
     flex: 1
   }
 });
+
+// Reduce function to get cards?
+// if (botMessage.attachments === true) {
+//   const cardMessage = botMessage.attachments.reduce((message, acc) => {
+//     return message += acc;
+//   }, {
+//     _id: botMessage.id,
+//       text: '',
+//       createdAt: botMessage.timestamp,
+//       user: {
+//         _id: 2,
+//         name: 'React Native',
+//         avatar: 'https://placeimg.com/140/140/any'
+//       },
+//       image:
+//         botMessage.attachments[0].content.body[0].columns[1].items[0].url});
+// }
+
+

@@ -76,7 +76,8 @@ export const SignedIn = createMaterialTopTabNavigator(
   {
     tabBarOptions: {
       style: {
-        paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight : 0
+        paddingTop: 10
+        //Platform.OS === 'android' ? StatusBar.currentHeight : 0
       }
     }
   }
