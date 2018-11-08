@@ -19,42 +19,35 @@ const directLine = new DirectLine({
 
 // all params to include in reply from bot, think the carousel is in the messages somewhere here. Maybe? Dunno.
 
-const botMessageToGiftedMessage = botMessage => {
-  botMessage.attachments !== undefined
+const botMessageToGiftedMessage = botMessage =>
+  botMessage.attachments
     ? {
-        text: botMessage.atachments[0]
-          .map(attachment => {
-            const starRatings = {
-              1: '⭐',
-              2: '⭐⭐',
-              3: '⭐⭐⭐',
-              4: '⭐⭐⭐⭐',
-              5: '⭐⭐⭐⭐⭐'
-            };
-            const stars = Math.round(
-              attachment.content.body[0].columns[0].items[4].text.substring(8)
-            );
-            const text =
-              attachment.content.body[0].columns[0].items[1].text +
-              '\n' +
-              '🏠 ' +
-              attachment.content.body[0].columns[0].items[2].text +
-              '\n' +
-              '📱' +
-              attachment.content.body[0].columns[0].items[3].text.replace(
-                '+44 ',
-                '0'
-              ) +
-              '\n' +
-              starRatings[stars] +
-              '\n' +
-              attachment.content.body[0].columns[0].items[5].text +
-              '\n' +
-              '__________________________';
+        text:
+          botMessage.attachments[0].content.body[0].columns[0].items[1].text +
+          '\n' +
+          '🏠 ' +
+          botMessage.attachments[0].content.body[0].columns[0].items[2].text +
+          '\n' +
+          '📱' +
+          botMessage.attachments[0].content.body[0].columns[0].items[3].text.replace(
+            '+44 ',
+            '0'
+          ) +
+          '\n' +
+          '⭐⭐⭐⭐⭐' +
+          '\n' +
+          '__________________________',
+        image:
+          botMessage.attachments[0].content.body[0].columns[1].items[0].url,
 
-            return text;
-          })
-          .join(' ')
+        _id: botMessage.id,
+        createdAt: botMessage.timestamp,
+        user: {
+          _id: 2,
+          name: 'React Native',
+          avatar:
+            'https://photos.gograph.com/thumbs/CSP/CSP834/daisy-flower-clip-art-vector_k8340445.jpg'
+        }
       }
     : {
         ...botMessage,
@@ -67,7 +60,6 @@ const botMessageToGiftedMessage = botMessage => {
             'https://photos.gograph.com/thumbs/CSP/CSP834/daisy-flower-clip-art-vector_k8340445.jpg'
         }
       };
-};
 
 // sends user info to bot
 function giftedMessageToBotMessage(message) {
@@ -88,10 +80,15 @@ export default class Messages extends React.Component {
     super(props);
     // the full bot reply, seems to include all messages sent
     directLine.activity$.subscribe(botMessage => {
-      console.log(botMessage); // - shows carousel and replies etc. Basically this is all messages in state
+      // - shows carousel and replies etc. Basically this is all messages in state
       if (botMessage.text === this.state.sentMessage) {
         return;
       }
+      console.log(
+        botMessage.attachments !== undefined
+          ? botMessage.attachments[0].content.body[0].columns[1].items[0].url
+          : 'nothing'
+      );
       const newMessage = botMessageToGiftedMessage(botMessage);
       this.setState({ messages: [newMessage, ...this.state.messages] });
     });
