@@ -8,6 +8,7 @@ import {
 } from 'react-native';
 import { GiftedChat } from 'react-native-gifted-chat';
 import { DirectLine } from 'botframework-directlinejs';
+//import daisy from '../assets/clipart1571496257.png';
 
 const directLine = new DirectLine({
   secret: 'AvY37YSRftY.cwA.Sms.JGgTwgGZb-NOT346gl1Hg0otOltyHMYr0nPqmpHXPk0'
@@ -17,16 +18,56 @@ const directLine = new DirectLine({
 //   Platform.OS === 'android' ? StatusBar.currentHeight : 0;
 
 // all params to include in reply from bot, think the carousel is in the messages somewhere here. Maybe? Dunno.
-const botMessageToGiftedMessage = botMessage => ({
-  ...botMessage,
-  _id: botMessage.id,
-  createdAt: botMessage.timestamp,
-  user: {
-    _id: 2,
-    name: 'React Native',
-    avatar: 'https://placeimg.com/140/140/any'
-  }
-});
+
+const botMessageToGiftedMessage = botMessage => {
+  botMessage.attachments !== undefined
+    ? {
+        text: botMessage.atachments[0]
+          .map(attachment => {
+            const starRatings = {
+              1: '⭐',
+              2: '⭐⭐',
+              3: '⭐⭐⭐',
+              4: '⭐⭐⭐⭐',
+              5: '⭐⭐⭐⭐⭐'
+            };
+            const stars = Math.round(
+              attachment.content.body[0].columns[0].items[4].text.substring(8)
+            );
+            const text =
+              attachment.content.body[0].columns[0].items[1].text +
+              '\n' +
+              '🏠 ' +
+              attachment.content.body[0].columns[0].items[2].text +
+              '\n' +
+              '📱' +
+              attachment.content.body[0].columns[0].items[3].text.replace(
+                '+44 ',
+                '0'
+              ) +
+              '\n' +
+              starRatings[stars] +
+              '\n' +
+              attachment.content.body[0].columns[0].items[5].text +
+              '\n' +
+              '__________________________';
+
+            return text;
+          })
+          .join(' ')
+      }
+    : {
+        ...botMessage,
+        _id: botMessage.id,
+        createdAt: botMessage.timestamp,
+        user: {
+          _id: 2,
+          name: 'React Native',
+          avatar:
+            'https://photos.gograph.com/thumbs/CSP/CSP834/daisy-flower-clip-art-vector_k8340445.jpg'
+        }
+      };
+};
 
 // sends user info to bot
 function giftedMessageToBotMessage(message) {
