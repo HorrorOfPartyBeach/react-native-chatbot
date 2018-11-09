@@ -110,5 +110,3 @@ const styles = StyleSheet.create({
 //       image:
 //         botMessage.attachments[0].content.body[0].columns[1].items[0].url});
 // }
-
-
