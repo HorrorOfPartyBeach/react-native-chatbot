@@ -5,21 +5,55 @@ import { GiftedChat } from 'react-native-gifted-chat';
 import { DirectLine } from 'botframework-directlinejs';
 
 const directLine = new DirectLine({
-  secret: 'AvY37YSRftY.cwA.Sms.JGgTwgGZb-NOT346gl1Hg0otOltyHMYr0nPqmpHXPk0'
+  secret: 'SECRET'
 });
 
-// all params to include in reply from bot, the adaptive cards are also in the messages
-const botMessageToGiftedMessage = botMessage => ({
-  ...botMessage,
-  _id: botMessage.id,
-  createdAt: botMessage.timestamp,
-  user: {
-    _id: 2,
-    name: 'Daisy Bot',
-    avatar: daisy
-  }
-  // image: 'https://placeimg.com/140/140/any'
-});
+// const keyboardVerticalOffset =
+//   Platform.OS === 'android' ? StatusBar.currentHeight : 0;
+
+// all params to include in reply from bot, think the carousel is in the messages somewhere here. Maybe? Dunno.
+
+const botMessageToGiftedMessage = botMessage =>
+  botMessage.attachments
+    ? {
+        text:
+          botMessage.attachments[0].content.body[0].columns[0].items[1].text +
+          '\n' +
+          '🏠 ' +
+          botMessage.attachments[0].content.body[0].columns[0].items[2].text +
+          '\n' +
+          '📱' +
+          botMessage.attachments[0].content.body[0].columns[0].items[3].text.replace(
+            '+44 ',
+            '0'
+          ) +
+          '\n' +
+          '⭐⭐⭐⭐⭐' +
+          '\n' +
+          '__________________________',
+        image:
+          botMessage.attachments[0].content.body[0].columns[1].items[0].url,
+
+        _id: botMessage.id,
+        createdAt: botMessage.timestamp,
+        user: {
+          _id: 2,
+          name: 'React Native',
+          avatar:
+            'https://photos.gograph.com/thumbs/CSP/CSP834/daisy-flower-clip-art-vector_k8340445.jpg'
+        }
+      }
+    : {
+        ...botMessage,
+        _id: botMessage.id,
+        createdAt: botMessage.timestamp,
+        user: {
+          _id: 2,
+          name: 'React Native',
+          avatar:
+            'https://photos.gograph.com/thumbs/CSP/CSP834/daisy-flower-clip-art-vector_k8340445.jpg'
+        }
+      };
 
 // sends user info to bot
 function giftedMessageToBotMessage(message) {
@@ -40,11 +74,15 @@ export default class Messages extends React.Component {
     super(props);
     // full bot reply, includes all messages sent
     directLine.activity$.subscribe(botMessage => {
-      console.log(botMessage); // - shows carousel and replies i.e. all messages in state
+      // - shows carousel and replies etc. Basically this is all messages in state
       if (botMessage.text === this.state.sentMessage) {
         return;
       }
-      // console.log(botMessage.attachments, 'hello from NC!');
+      console.log(
+        botMessage.attachments !== undefined
+          ? botMessage.attachments[0].content.body[0].columns[1].items[0].url
+          : 'nothing'
+      );
       const newMessage = botMessageToGiftedMessage(botMessage);
       this.setState({
         messages: [newMessage, ...this.state.messages]
